@@ -1,0 +1,8 @@
+server:
+  port: 5001
+
+base-url: /tms
+
+spring:
+  application:
+    name: taskManagementSystem
