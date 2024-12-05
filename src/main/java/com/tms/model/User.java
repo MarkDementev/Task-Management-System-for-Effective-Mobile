@@ -25,6 +25,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //TODO куда то добавь валидацию уникальности почты
     @NotBlank
     private String email;
 
