@@ -5,4 +5,4 @@ base-url: /tms
 
 spring:
   application:
-    name: taskManagementSystem
+    name: tms
