@@ -8,7 +8,7 @@
     <changeSet id="create-users-table" author="MarkDementev">
         <createTable tableName="all_users_and_admin">
             <column name="id" type="SERIAL">
-                <constraints primaryKey="true" nullable="false"/>
+                <constraints primaryKey="true"/>
             </column>
             <column name="email" type="varchar">
                 <constraints nullable="false" unique="true"/>
@@ -20,10 +20,8 @@
                 <constraints nullable="false"/>
             </column>
             <column name="created_at" type="TIMESTAMP(3) WITH TIMEZONE">
-                <constraints nullable="false"/>
             </column>
             <column name="updated_at" type="TIMESTAMP(3) WITH TIMEZONE">
-                <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
