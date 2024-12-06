@@ -10,6 +10,7 @@
             <column name="email" value="admin_mail@mail.ru"/>
             <column name="password" value="1q2w3e"/>
             <column name="is_admin" value="true"/>
+            <column name="user_or_admin" value="admin"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

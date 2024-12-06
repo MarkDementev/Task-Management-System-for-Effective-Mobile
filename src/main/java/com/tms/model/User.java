@@ -17,6 +17,8 @@ import java.time.Instant;
 @Entity
 @Table(name = "all_users_and_admin")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "user_or_admin", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("user")
 @NoArgsConstructor
 @Getter
 @Setter

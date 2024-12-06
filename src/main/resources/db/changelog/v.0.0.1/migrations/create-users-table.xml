@@ -19,6 +19,8 @@
             <column name="is_admin" type="boolean">
                 <constraints nullable="false"/>
             </column>
+            <column name="user_or_admin" type="varchar">
+            </column>
             <column name="created_at" type="TIMESTAMP(3) WITH TIMEZONE">
             </column>
             <column name="updated_at" type="TIMESTAMP(3) WITH TIMEZONE">
