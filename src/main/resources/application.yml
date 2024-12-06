@@ -6,3 +6,7 @@ base-url: /tms
 spring:
   application:
     name: tms
+
+springdoc:
+  swagger-ui:
+    path: /swagger.html

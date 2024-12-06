@@ -1,5 +1,7 @@
 package com.tms.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 import jakarta.validation.constraints.NotBlank;
@@ -32,6 +34,7 @@ public class User {
     private String email;
 
     @NotBlank
+    @JsonIgnore
     private String password;
 
     @NotNull
