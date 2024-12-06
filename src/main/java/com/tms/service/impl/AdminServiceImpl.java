@@ -4,6 +4,7 @@ import com.tms.dto.UserDTO;
 import com.tms.model.Admin;
 import com.tms.repository.AdminRepository;
 import com.tms.service.AdminService;
+import com.tms.service.util.AdminUserUtilService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,15 +25,13 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.REPEATABLE_READ, rollbackFor = {Exception.class})
+    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public Admin updateAdmin(UserDTO adminDTO) {
         AtomicReference<Admin> atomicAdminToUpdate = new AtomicReference<>(
                 adminRepository.findAll().get(0)
         );
 
-        atomicAdminToUpdate.get().setEmail(adminDTO.getEmail());
-        atomicAdminToUpdate.get().setPassword(adminDTO.getPassword());
-
+        AdminUserUtilService.getFromDTOThenSetAll(atomicAdminToUpdate, adminDTO);
         return adminRepository.save(atomicAdminToUpdate.get());
     }
 }
