@@ -20,13 +20,15 @@ public class AdminController {
     public static final String ADMIN_CONTROLLER_PATH = "/admin";
     private final AdminService adminService;
 
-    //TODO добавь опенапи док и секюрити для админа онли
+    //TODO добавь опенапи док
+    //TODO add секюрити для админа онли
     @GetMapping
     public ResponseEntity<Admin> getAdmin() {
         return ResponseEntity.ok().body(adminService.getAdmin());
     }
 
-    //TODO добавь опенапи док и секюрити для админа онли
+    //TODO добавь опенапи док
+    //TODO add секюрити для админа онли
     @PutMapping
     public ResponseEntity<Admin> updateAdmin(@RequestBody @Valid UserDTO adminDTO) {
         return ResponseEntity.ok().body(adminService.updateAdmin(adminDTO));
