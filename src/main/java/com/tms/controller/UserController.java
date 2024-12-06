@@ -1,7 +1,7 @@
 package com.tms.controller;
 
 import com.tms.dto.UserDTO;
-import com.tms.model.User;
+import com.tms.model.user.User;
 import com.tms.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;

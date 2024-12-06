@@ -1,7 +1,7 @@
 package com.tms.service.util;
 
 import com.tms.dto.UserDTO;
-import com.tms.model.User;
+import com.tms.model.user.User;
 
 import org.springframework.stereotype.Service;
 

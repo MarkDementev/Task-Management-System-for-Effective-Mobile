@@ -1,4 +1,4 @@
-package com.tms.model;
+package com.tms.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

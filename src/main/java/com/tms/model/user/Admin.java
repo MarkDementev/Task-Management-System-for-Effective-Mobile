@@ -1,4 +1,4 @@
-package com.tms.model;
+package com.tms.model.user;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;

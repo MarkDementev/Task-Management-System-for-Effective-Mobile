@@ -1,7 +1,7 @@
 package com.tms.service.impl;
 
 import com.tms.dto.UserDTO;
-import com.tms.model.Admin;
+import com.tms.model.user.Admin;
 import com.tms.repository.AdminRepository;
 import com.tms.service.AdminService;
 import com.tms.service.util.AdminUserUtilService;
