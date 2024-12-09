@@ -6,9 +6,11 @@ import com.tms.dto.update.UpdateTaskDTO;
 import com.tms.exception.EntityWithIDNotFoundException;
 import com.tms.model.task.Task;
 import com.tms.model.user.Admin;
+import com.tms.model.user.User;
 import com.tms.repository.TaskRepository;
 import com.tms.service.AdminService;
 import com.tms.service.TaskService;
+import com.tms.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,8 +22,9 @@ import java.util.concurrent.atomic.AtomicReference;
 @Service
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
-    TaskRepository taskRepository;
-    AdminService adminService;
+    private final TaskRepository taskRepository;
+    private final UserService userService;
+    private final AdminService adminService;
 
     @Override
     public List<Task> getTasks() {
@@ -33,11 +36,12 @@ public class TaskServiceImpl implements TaskService {
         Admin admin = adminService.getAdmin();
         Task taskToCreate;
 
-        if (taskDTO.getExecutioner() == null) {
+        if (taskDTO.getExecutionerID() == null) {
             taskToCreate = new Task(taskDTO.getTitle(), taskDTO.getDescription(), taskDTO.getTaskPriority());
         } else {
+            User executioner = userService.getUser(taskDTO.getExecutionerID());
             taskToCreate = new Task(taskDTO.getTitle(), taskDTO.getDescription(), taskDTO.getTaskPriority(),
-                    taskDTO.getExecutioner());
+                    executioner);
         }
         taskToCreate.setAuthor(admin);
 
@@ -52,12 +56,27 @@ public class TaskServiceImpl implements TaskService {
                 taskRepository.findById(id).orElseThrow(() -> new EntityWithIDNotFoundException(
                         Task.class.getSimpleName(), id))
         );
+        User executioner = null;
 
-        atomicTaskToUpdate.get().setTitle(updateTaskDTO.getTitle().get());
-        atomicTaskToUpdate.get().setDescription(updateTaskDTO.getDescription().get());
-        atomicTaskToUpdate.get().setTaskPriority(updateTaskDTO.getTaskPriority().get());
-        atomicTaskToUpdate.get().setExecutioner(updateTaskDTO.getExecutioner().get());
-        atomicTaskToUpdate.get().setTaskStatus(updateTaskDTO.getTaskStatus().get());
+        if (updateTaskDTO.getExecutionerID() != null) {
+            executioner = userService.getUser(updateTaskDTO.getExecutionerID().get());
+        }
+
+        if (updateTaskDTO.getTitle() != null) {
+            atomicTaskToUpdate.get().setTitle(updateTaskDTO.getTitle().get());
+        }
+        if (updateTaskDTO.getDescription() != null) {
+            atomicTaskToUpdate.get().setDescription(updateTaskDTO.getDescription().get());
+        }
+        if (updateTaskDTO.getTaskPriority() != null) {
+            atomicTaskToUpdate.get().setTaskPriority(updateTaskDTO.getTaskPriority().get());
+        }
+        if (executioner != null) {
+            atomicTaskToUpdate.get().setExecutioner(executioner);
+        }
+        if (updateTaskDTO.getTaskStatus() != null) {
+            atomicTaskToUpdate.get().setTaskStatus(updateTaskDTO.getTaskStatus().get());
+        }
         return taskRepository.save(atomicTaskToUpdate.get());
     }
 
@@ -68,7 +87,9 @@ public class TaskServiceImpl implements TaskService {
                         Task.class.getSimpleName(), id))
         );
 
-        atomicTaskToUpdate.get().setTaskStatus(updateTaskDTO.getTaskStatus().get());
+        if (updateTaskDTO.getTaskStatus() != null) {
+            atomicTaskToUpdate.get().setTaskStatus(updateTaskDTO.getTaskStatus().get());
+        }
         return taskRepository.save(atomicTaskToUpdate.get());
     }
 

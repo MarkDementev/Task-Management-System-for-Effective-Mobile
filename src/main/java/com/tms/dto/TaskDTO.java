@@ -1,7 +1,6 @@
 package com.tms.dto;
 
 import com.tms.enumeration.TaskPriority;
-import com.tms.model.user.User;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -27,5 +26,5 @@ public class TaskDTO {
     @Enumerated(EnumType.STRING)
     private TaskPriority taskPriority;
 
-    private User executioner;
+    private Long executionerID;
 }

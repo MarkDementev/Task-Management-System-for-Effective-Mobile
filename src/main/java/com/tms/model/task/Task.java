@@ -1,5 +1,7 @@
 package com.tms.model.task;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import com.tms.enumeration.TaskPriority;
 import com.tms.enumeration.TaskStatus;
 import com.tms.model.user.User;
@@ -26,6 +28,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "tasks")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @NoArgsConstructor
 @Getter
 @Setter
@@ -35,9 +38,11 @@ public class Task {
     private Long id;
 
     @NotBlank
+    @Column(unique = true)
     private String title;
 
     @NotBlank
+    @Column(unique = true)
     private String description;
 
     @NotNull

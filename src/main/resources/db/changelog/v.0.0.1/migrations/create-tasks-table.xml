@@ -11,15 +11,15 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="title" type="varchar">
-                <constraints nullable="false"/>
+                <constraints nullable="false" unique="true"/>
             </column>
             <column name="description" type="varchar">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="task_status" type="varchar">
                 <constraints nullable="false"/>
             </column>
-            <column name="taskStatus" type="varchar">
-                <constraints nullable="false"/>
-            </column>
-            <column name="taskPriority" type="varchar">
+            <column name="task_priority" type="varchar">
                 <constraints nullable="false"/>
             </column>
             <column name="author_id" type="BIGINT">

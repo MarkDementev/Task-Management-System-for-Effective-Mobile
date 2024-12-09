@@ -29,16 +29,12 @@ import static com.tms.controller.TaskController.TASK_CONTROLLER_PATH;
 public class TaskController {
     public static final String TASK_CONTROLLER_PATH = "/tasks";
     public static final String ID_PATH = "/{id}";
+    public static final String ADMIN_UPDATE_PATH = "/by-admin-up";
+    public static final String USER_UPDATE_PATH = "/by-user-up";
     private final TaskService taskService;
 
-//    @Operation(summary = "Get user / Method for this user only")
-//    @ApiResponse(responseCode = "200", content = @Content(
-//            schema = @Schema(implementation = User.class))
-//    )
-//    @GetMapping(ID_PATH)
-//    public ResponseEntity<User> getUser(@PathVariable Long id) {
-//        return ResponseEntity.ok().body(userService.getUser(id));
-//    }
+    //TODO полагаю, нужно 3 метода с ГЕТ - один для получения одной задачи по айди для админа, второй для получения
+    //TODO всех задач конкретным автором, третий для получения всех задач конкретным исполнителем
 
     @Operation(summary = "Get all tasks / Method for admin only")
     @ApiResponses(@ApiResponse(responseCode = "200", content = @Content(
@@ -60,7 +56,7 @@ public class TaskController {
     @ApiResponse(responseCode = "200", description = "Task updated", content = @Content(
             schema = @Schema(implementation = Task.class))
     )
-    @PutMapping(ID_PATH)
+    @PutMapping(ADMIN_UPDATE_PATH + ID_PATH)
     public ResponseEntity<Task> updateTaskByAdmin(@PathVariable Long id,
                                            @RequestBody @Valid UpdateTaskAdminDTO updateTaskDTO) {
         return ResponseEntity.ok().body(taskService.updateTask(id, updateTaskDTO));
@@ -70,7 +66,7 @@ public class TaskController {
     @ApiResponse(responseCode = "200", description = "Task updated", content = @Content(
             schema = @Schema(implementation = Task.class))
     )
-    @PutMapping(ID_PATH)
+    @PutMapping(USER_UPDATE_PATH + ID_PATH)
     public ResponseEntity<Task> updateTaskByUser(@PathVariable Long id,
                                                   @RequestBody @Valid UpdateTaskDTO updateTaskDTO) {
         return ResponseEntity.ok().body(taskService.updateTask(id, updateTaskDTO));

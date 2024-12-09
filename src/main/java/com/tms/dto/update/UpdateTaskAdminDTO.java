@@ -1,7 +1,6 @@
 package com.tms.dto.update;
 
 import com.tms.enumeration.TaskPriority;
-import com.tms.model.user.User;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -23,5 +22,5 @@ public class UpdateTaskAdminDTO extends UpdateTaskDTO {
     @Enumerated(EnumType.STRING)
     private JsonNullable<TaskPriority> taskPriority;
 
-    private JsonNullable<User> executioner;
+    private JsonNullable<Long> executionerID;
 }

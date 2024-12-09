@@ -17,4 +17,6 @@ import org.openapitools.jackson.nullable.JsonNullable;
 public class UpdateTaskDTO {
     @Enumerated(EnumType.STRING)
     private JsonNullable<TaskStatus> taskStatus;
+
+    //TODO дай возможность добавить коммент (это может быть нужно и при создании, и при апдейте)
 }

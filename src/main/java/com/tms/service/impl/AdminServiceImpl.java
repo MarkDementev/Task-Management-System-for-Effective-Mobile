@@ -22,6 +22,19 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Admin getAdmin() {
+        return getAdminWithCheck();
+    }
+
+    @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
+    public Admin updateAdmin(UserDTO adminDTO) {
+        AtomicReference<Admin> atomicAdminToUpdate = new AtomicReference<>(getAdminWithCheck());
+
+        AdminUserUtilService.getFromDTOThenSetAll(atomicAdminToUpdate, adminDTO);
+        return adminRepository.save(atomicAdminToUpdate.get());
+    }
+
+    public Admin getAdminWithCheck() {
         Optional<Admin> adminOptional = Optional.ofNullable(adminRepository.findByIsAdmin(true));
 
         if (adminOptional.isEmpty()) {
@@ -30,16 +43,5 @@ public class AdminServiceImpl implements AdminService {
         } else {
             return adminOptional.get();
         }
-    }
-
-    @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
-    public Admin updateAdmin(UserDTO adminDTO) {
-        AtomicReference<Admin> atomicAdminToUpdate = new AtomicReference<>(
-                adminRepository.findAll().get(0)
-        );
-
-        AdminUserUtilService.getFromDTOThenSetAll(atomicAdminToUpdate, adminDTO);
-        return adminRepository.save(atomicAdminToUpdate.get());
     }
 }
