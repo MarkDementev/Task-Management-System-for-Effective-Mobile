@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
@@ -21,7 +22,14 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Admin getAdmin() {
-        return adminRepository.findAll().get(0);
+        Optional<Admin> adminOptional = Optional.ofNullable(adminRepository.findByIsAdmin(true));
+
+        if (adminOptional.isEmpty()) {
+            throw new RuntimeException("Admin always exists in this application, but for some reason is not found" +
+                    " now!");
+        } else {
+            return adminOptional.get();
+        }
     }
 
     @Override

@@ -9,7 +9,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,7 +27,6 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 @Table(name = "tasks")
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class Task {
@@ -53,7 +51,6 @@ public class Task {
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments;
 
-    @NotNull
     @OneToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "author_id")
@@ -68,4 +65,19 @@ public class Task {
 
     @UpdateTimestamp
     private Instant updatedAt;
+
+    public Task(String title, String description, TaskPriority taskPriority) {
+        this.title = title;
+        this.description = description;
+        this.taskStatus = TaskStatus.WAITING;
+        this.taskPriority = taskPriority;
+    }
+
+    public Task(String title, String description, TaskPriority taskPriority, User executioner) {
+        this.title = title;
+        this.description = description;
+        this.taskStatus = TaskStatus.WAITING;
+        this.taskPriority = taskPriority;
+        this.executioner = executioner;
+    }
 }
