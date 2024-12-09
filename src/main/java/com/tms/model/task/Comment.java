@@ -1,9 +1,6 @@
 package com.tms.model.task;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import jakarta.validation.constraints.NotBlank;
 
@@ -35,6 +32,11 @@ public class Comment {
 
     @NotBlank
     private String text;
+
+    @NotBlank
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "task_id", nullable = false)
+    private Task task;
 
     @CreationTimestamp
     private Instant createdAt;

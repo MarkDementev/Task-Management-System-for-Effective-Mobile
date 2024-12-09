@@ -43,18 +43,20 @@ public class Task {
     private String description;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     private TaskStatus taskStatus;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     private TaskPriority taskPriority;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments;
 
+    @NotNull
     @OneToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "author_id")
-    @NotNull
     private User author;
 
     @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)

@@ -7,4 +7,6 @@
 
     <include file="migrations/create-users-table.xml" relativeToChangelogFile="true"/>
     <include file="migrations/add-admin.xml" relativeToChangelogFile="true"/>
+    <include file="migrations/create-tasks-table.xml" relativeToChangelogFile="true"/>
+    <include file="migrations/create-comments-table.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

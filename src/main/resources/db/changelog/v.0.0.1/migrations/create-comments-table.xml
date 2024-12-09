@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="create-comments-table" author="MarkDementev">
+        <createTable tableName="comments">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="text" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="task_id" type="BIGINT">
+                <constraints foreignKeyName="comments_task_id_tasks_id" references="tasks(id)"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP(3) WITH TIMEZONE">
+            </column>
+            <column name="updated_at" type="TIMESTAMP(3) WITH TIMEZONE">
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
