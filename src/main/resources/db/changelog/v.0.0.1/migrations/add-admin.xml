@@ -8,7 +8,7 @@
     <changeSet id="add-admin" author="MarkDementev">
         <insert tableName = "all_users_and_admin">
             <column name="email" value="admin_mail@mail.ru"/>
-            <column name="password" value="1q2w3e"/>
+            <column name="password" value="$2a$12$qMJAxKHlbIS2RYxBHAHQoOVolyl.FvBbwNlWfL2AXvx.WU6z9c4yC"/>
             <column name="is_admin" value="true"/>
             <column name="user_or_admin" value="admin"/>
         </insert>

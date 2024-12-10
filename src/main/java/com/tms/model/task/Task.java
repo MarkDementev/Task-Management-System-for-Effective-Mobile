@@ -1,6 +1,7 @@
 package com.tms.model.task;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import com.tms.enumeration.TaskPriority;
 import com.tms.enumeration.TaskStatus;
@@ -54,7 +55,8 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private TaskPriority taskPriority;
 
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Comment> comments;
 
     @OneToOne(fetch = FetchType.LAZY)

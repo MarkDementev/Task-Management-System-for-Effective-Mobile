@@ -11,6 +11,7 @@ import com.tms.service.util.AdminUserUtilService;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User getUser(Long id) {
@@ -37,8 +39,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public User createUser(UserDTO userDTO) {
+        String passwordEncoded = passwordEncoder.encode(userDTO.getPassword());
         AtomicReference<User> atomicNewUser = new AtomicReference<>(new User(userDTO.getEmail(),
-                userDTO.getPassword()));
+                passwordEncoded));
 
         return userRepository.save(atomicNewUser.get());
     }
@@ -51,8 +54,7 @@ public class UserServiceImpl implements UserService {
                         User.class.getSimpleName(), id))
         );
 
-        AdminUserUtilService.getFromDTOThenSetAll(atomicUserToUpdate, userDTO);
-
+        AdminUserUtilService.getFromDTOThenSetAll(atomicUserToUpdate, userDTO, passwordEncoder);
         return userRepository.save(atomicUserToUpdate.get());
     }
 

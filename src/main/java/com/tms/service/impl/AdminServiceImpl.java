@@ -8,6 +8,7 @@ import com.tms.service.util.AdminUserUtilService;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService {
     private final AdminRepository adminRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Admin getAdmin() {
@@ -30,7 +32,7 @@ public class AdminServiceImpl implements AdminService {
     public Admin updateAdmin(UserDTO adminDTO) {
         AtomicReference<Admin> atomicAdminToUpdate = new AtomicReference<>(getAdminWithCheck());
 
-        AdminUserUtilService.getFromDTOThenSetAll(atomicAdminToUpdate, adminDTO);
+        AdminUserUtilService.getFromDTOThenSetAll(atomicAdminToUpdate, adminDTO, passwordEncoder);
         return adminRepository.save(atomicAdminToUpdate.get());
     }
 

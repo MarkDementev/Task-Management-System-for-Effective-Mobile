@@ -1,5 +1,6 @@
 package com.tms.model.task;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import com.tms.model.user.User;
@@ -46,6 +47,7 @@ public class Comment {
     private User author;
 
     @NotNull
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_id", nullable = false)
     private Task task;

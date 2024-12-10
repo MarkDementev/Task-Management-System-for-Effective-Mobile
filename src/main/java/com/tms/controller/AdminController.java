@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import static com.tms.controller.AdminController.ADMIN_CONTROLLER_PATH;
@@ -23,6 +24,7 @@ import static com.tms.controller.AdminController.ADMIN_CONTROLLER_PATH;
 @AllArgsConstructor
 public class AdminController {
     public static final String ADMIN_CONTROLLER_PATH = "/admin";
+    public static final String ONLY_ADMIN = "hasAuthority('ROLE_ADMIN')";
     private final AdminService adminService;
 
     @Operation(summary = "Get admin / Method for admin only")
@@ -30,6 +32,7 @@ public class AdminController {
             schema = @Schema(implementation = Admin.class))
     )
     @GetMapping
+    @PreAuthorize(ONLY_ADMIN)
     public ResponseEntity<Admin> getAdmin() {
         return ResponseEntity.ok().body(adminService.getAdmin());
     }
@@ -39,6 +42,7 @@ public class AdminController {
             schema = @Schema(implementation = Admin.class))
     )
     @PutMapping
+    @PreAuthorize(ONLY_ADMIN)
     public ResponseEntity<Admin> updateAdmin(@RequestBody @Valid UserDTO adminDTO) {
         return ResponseEntity.ok().body(adminService.updateAdmin(adminDTO));
     }
