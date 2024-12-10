@@ -13,7 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 import jakarta.validation.Valid;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,12 +26,12 @@ import static com.tms.controller.UserController.USER_CONTROLLER_PATH;
 
 @RestController
 @RequestMapping("{base-url}" + USER_CONTROLLER_PATH)
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserController {
     public static final String USER_CONTROLLER_PATH = "/users";
     public static final String ID_PATH = "/{id}";
     private static final String ONLY_THIS_USER = """
-            @userRepository.findById(#id).get().getEmail() == authentication.principal.username
+            @userRepository.findById(#id).get().getEmail() == authentication.getName()
             """;
     private final UserService userService;
     private final UserRepository userRepository;

@@ -6,7 +6,7 @@ import com.tms.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,7 +18,7 @@ import static com.tms.controller.CommentController.COMMENT_CONTROLLER_PATH;
 
 @RestController
 @RequestMapping("{base-url}" + COMMENT_CONTROLLER_PATH)
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CommentController {
     public static final String COMMENT_CONTROLLER_PATH = "/comments";
     public static final String ID_PATH = "/{id}";
@@ -28,7 +28,7 @@ public class CommentController {
     @Operation(summary = "Delete comment / Method for users-comment authors and admin")
     @ApiResponse(responseCode = "200", description = "Comment deleted")
     @DeleteMapping(ID_PATH)
-    @PreAuthorize("@commentRepository.findById(#id).get().getAuthor().getEmail() == authentication.principal.username")
+    @PreAuthorize("@commentRepository.findById(#id).get().getAuthor().getEmail() == authentication.getName()")
     public void deleteComment(@PathVariable Long id) {
         commentService.deleteComment(id);
     }

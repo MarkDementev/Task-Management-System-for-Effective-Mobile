@@ -74,9 +74,9 @@ public class TaskController {
             schema = @Schema(implementation = Task.class))
     )
     @PutMapping(USER_UPDATE_PATH + ID_PATH)
-    @PreAuthorize("@taskRepository.findById(#id).get().getAuthor().getEmail() == authentication.principal.username")
+    @PreAuthorize("@taskRepository.findById(#id).get().getAuthor().getEmail() == authentication.getName()")
     public ResponseEntity<Task> updateTaskByUser(@PathVariable Long id,
-                                                  @RequestBody @Valid UpdateTaskDTO updateTaskDTO) {
+                                                 @RequestBody @Valid UpdateTaskDTO updateTaskDTO) {
         return ResponseEntity.ok().body(taskService.updateTask(id, updateTaskDTO));
     }
 
