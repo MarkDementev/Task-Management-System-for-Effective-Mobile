@@ -1,14 +1,17 @@
 package com.tms.service.impl;
 
+import com.tms.dto.CommentDTO;
 import com.tms.dto.TaskDTO;
 import com.tms.dto.update.UpdateTaskAdminDTO;
 import com.tms.dto.update.UpdateTaskDTO;
 import com.tms.exception.EntityWithIDNotFoundException;
+import com.tms.model.task.Comment;
 import com.tms.model.task.Task;
 import com.tms.model.user.Admin;
 import com.tms.model.user.User;
 import com.tms.repository.TaskRepository;
 import com.tms.service.AdminService;
+import com.tms.service.CommentService;
 import com.tms.service.TaskService;
 import com.tms.service.UserService;
 
@@ -23,8 +26,9 @@ import java.util.concurrent.atomic.AtomicReference;
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
-    private final UserService userService;
     private final AdminService adminService;
+    private final UserService userService;
+    private final CommentService commentService;
 
     @Override
     public List<Task> getTasks() {
@@ -44,9 +48,17 @@ public class TaskServiceImpl implements TaskService {
                     executioner);
         }
         taskToCreate.setAuthor(admin);
-
         AtomicReference<Task> atomicNewTask = new AtomicReference<>(taskToCreate);
 
+        if (taskDTO.getInitialCommentName() != null && taskDTO.getInitialCommentText() != null) {
+            taskRepository.save(atomicNewTask.get());
+
+            CommentDTO commentDTO = new CommentDTO(taskDTO.getInitialCommentName(), taskDTO.getInitialCommentText(),
+                    admin.getId(), atomicNewTask.get().getId());
+            Comment initialComment = commentService.createComment(commentDTO);
+
+            atomicNewTask.get().getComments().add(initialComment);
+        }
         return taskRepository.save(atomicNewTask.get());
     }
 
@@ -61,7 +73,9 @@ public class TaskServiceImpl implements TaskService {
         if (updateTaskDTO.getExecutionerID() != null) {
             executioner = userService.getUser(updateTaskDTO.getExecutionerID().get());
         }
-
+        if (updateTaskDTO.getTaskStatus() != null) {
+            atomicTaskToUpdate.get().setTaskStatus(updateTaskDTO.getTaskStatus().get());
+        }
         if (updateTaskDTO.getTitle() != null) {
             atomicTaskToUpdate.get().setTitle(updateTaskDTO.getTitle().get());
         }
@@ -74,8 +88,16 @@ public class TaskServiceImpl implements TaskService {
         if (executioner != null) {
             atomicTaskToUpdate.get().setExecutioner(executioner);
         }
-        if (updateTaskDTO.getTaskStatus() != null) {
-            atomicTaskToUpdate.get().setTaskStatus(updateTaskDTO.getTaskStatus().get());
+        if (updateTaskDTO.getAdditionalCommentName() != null && updateTaskDTO.getAdditionalCommentText() != null) {
+            Admin admin = adminService.getAdmin();
+            CommentDTO commentDTO = new CommentDTO(
+                    updateTaskDTO.getAdditionalCommentName().get(),
+                    updateTaskDTO.getAdditionalCommentText().get(),
+                    admin.getId(),
+                    atomicTaskToUpdate.get().getId());
+            Comment initialComment = commentService.createComment(commentDTO);
+
+            atomicTaskToUpdate.get().getComments().add(initialComment);
         }
         return taskRepository.save(atomicTaskToUpdate.get());
     }

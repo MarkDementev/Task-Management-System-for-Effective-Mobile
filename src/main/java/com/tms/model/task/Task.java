@@ -22,6 +22,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -76,6 +77,7 @@ public class Task {
         this.description = description;
         this.taskStatus = TaskStatus.WAITING;
         this.taskPriority = taskPriority;
+        this.comments = new ArrayList<>();
     }
 
     public Task(String title, String description, TaskPriority taskPriority, User executioner) {
@@ -83,6 +85,7 @@ public class Task {
         this.description = description;
         this.taskStatus = TaskStatus.WAITING;
         this.taskPriority = taskPriority;
+        this.comments = new ArrayList<>();
         this.executioner = executioner;
     }
 }
