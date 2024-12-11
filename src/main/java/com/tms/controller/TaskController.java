@@ -64,6 +64,13 @@ public class TaskController {
         return ResponseEntity.ok().body(taskService.getTasks());
     }
 
+    /**
+     * Controller method for receiving tasks of a specific author or executor, as well as all comments to them
+     * @param id author/executor id
+     * @param userType request type = "author"/"executor"
+     * @param limit count of returning tasks, limit - 10 tasks
+     * @return filtered and paginated tasks
+     */
     @Operation(summary = "Get all tasks filtered by author id or executioner id with tasks count pagination")
     @ApiResponses(@ApiResponse(responseCode = "200", content = @Content(
             schema = @Schema(implementation = Task.class)))

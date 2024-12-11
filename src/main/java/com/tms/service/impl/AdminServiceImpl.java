@@ -36,6 +36,10 @@ public class AdminServiceImpl implements AdminService {
         return adminRepository.save(atomicAdminToUpdate.get());
     }
 
+    /**
+     * Method to get Admin entity and check if it was pre-created successfully
+     * @return Admin entity
+     */
     public Admin getAdminWithCheck() {
         Optional<Admin> adminOptional = Optional.ofNullable(adminRepository.findByIsAdmin(true));
 

@@ -56,6 +56,12 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getUsers());
     }
 
+    /**
+     * Controller method for creating new Users
+     * @param userDTO UserDTO, email regexp = ^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$,
+     *               password regexp = [a-zA-Z0-9]{6}
+     * @return created User entity
+     */
     @Operation(summary = "Create new user / Method for admin only")
     @ApiResponse(responseCode = "201", description = "User created")
     @PostMapping
