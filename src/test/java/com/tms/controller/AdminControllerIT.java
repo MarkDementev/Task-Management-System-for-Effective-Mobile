@@ -7,6 +7,7 @@ import com.tms.config.SpringConfigForTests;
 import com.tms.model.user.Admin;
 import com.tms.repository.AdminRepository;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -39,17 +40,24 @@ public class AdminControllerIT {
     private AdminRepository adminRepository;
 
     @BeforeEach
-    public void loginBeforeTest() throws Exception {
+    public void beforeTest() throws Exception {
+        testUtils.addAdmin();
         testUtils.login(testUtils.getAdminLoginDto());
+    }
+
+    @AfterEach
+    public void clearRepositories() {
+        testUtils.tearDown();
     }
 
     @Test
     public void getAdminIT() throws Exception {
         Admin adminCreatedAtStart = adminRepository.findByIsAdmin(true);
         var response = testUtils.perform(
-                        get("/tms" + ADMIN_CONTROLLER_PATH),
+                get("/tms" + ADMIN_CONTROLLER_PATH),
                         ADMIN_NAME
-                ).andExpect(status().isOk())
+                )
+                .andExpect(status().isOk())
                 .andReturn()
                 .getResponse();
         Admin adminFromResponse = fromJson(response.getContentAsString(), new TypeReference<>() {
@@ -64,10 +72,11 @@ public class AdminControllerIT {
     public void updateAdminIT() throws Exception {
         Admin adminCreatedAtStart = adminRepository.findByIsAdmin(true);
         var response = testUtils.perform(
-                        put("/tms" + ADMIN_CONTROLLER_PATH)
+                put("/tms" + ADMIN_CONTROLLER_PATH)
                         .content(asJson(testUtils.getUpdateAdminDTO())).contentType(APPLICATION_JSON),
                         ADMIN_NAME
-                ).andExpect(status().isOk())
+                )
+                .andExpect(status().isOk())
                 .andReturn()
                 .getResponse();
         Admin adminFromResponse = fromJson(response.getContentAsString(), new TypeReference<>() {

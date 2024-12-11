@@ -6,9 +6,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.tms.dto.LoginDto;
 import com.tms.dto.UserDTO;
+import com.tms.model.user.Admin;
+import com.tms.repository.AdminRepository;
+import com.tms.repository.UserRepository;
 import com.tms.security.JWTHelper;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -18,6 +22,7 @@ import java.util.Map;
 
 import static com.tms.config.SecurityConfig.ADMIN_NAME;
 import static com.tms.config.SecurityConfig.LOGIN_PATH;
+import static com.tms.controller.UserController.USER_CONTROLLER_PATH;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -25,20 +30,52 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @Component
 public class TestUtils {
-    public static final String ADMIN_PASSWORD = "1q2w3e";
+    private static final String ADMIN_PASSWORD = "1q2w3e";
+    private static final String DEFAULT_USER_EMAIL = "default_user@google.com";
+    private static final String DEFAULT_USER_PASSWORD = "aaa765";
     private static final ObjectMapper MAPPER = new ObjectMapper().findAndRegisterModules();
+    private final UserDTO adminDto = new UserDTO(
+            ADMIN_NAME,
+            ADMIN_PASSWORD
+    );
+    private final UserDTO defaultUserDTO = new UserDTO(
+            DEFAULT_USER_EMAIL,
+            DEFAULT_USER_PASSWORD
+    );
     private final LoginDto adminLoginDto = new LoginDto(
             ADMIN_NAME,
             ADMIN_PASSWORD
     );
     private final UserDTO updateAdminDTO = new UserDTO(
             "!" + ADMIN_NAME,
-            "123456"
+            new StringBuilder(ADMIN_PASSWORD).reverse().toString()
     );
+    private final UserDTO updateUserDTO = new UserDTO(
+            "!" + defaultUserDTO.getEmail(),
+            new StringBuilder(DEFAULT_USER_PASSWORD).reverse().toString()
+    );
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private JWTHelper jwtHelper;
+    @Autowired
+    private AdminRepository adminRepository;
+    @Autowired
+    private UserRepository userRepository;
+
+    public void addAdmin() {
+        String passwordEncoded = passwordEncoder.encode(adminDto.getPassword());
+        Admin admin = new Admin(adminDto.getEmail(), passwordEncoded);
+
+        adminRepository.save(admin);
+    }
+
+    public void tearDown() {
+        adminRepository.deleteAll();
+        userRepository.deleteAll();
+    }
 
     public ResultActions perform(final MockHttpServletRequestBuilder request) throws Exception {
         return mockMvc.perform(request);
@@ -69,5 +106,25 @@ public class TestUtils {
 
     public UserDTO getUpdateAdminDTO() {
         return updateAdminDTO;
+    }
+
+    public UserDTO getUpdateUserDTO() {
+        return updateUserDTO;
+    }
+
+    public UserDTO getDefaultUserDTO() {
+        return defaultUserDTO;
+    }
+
+    public ResultActions createDefaultUser() throws Exception {
+        return createUser(defaultUserDTO);
+    }
+
+    public ResultActions createUser(UserDTO userDTO) throws Exception {
+        final var request = post("/tms" + USER_CONTROLLER_PATH)
+                .content(asJson(userDTO))
+                .contentType(APPLICATION_JSON);
+
+        return perform(request, ADMIN_NAME);
     }
 }
