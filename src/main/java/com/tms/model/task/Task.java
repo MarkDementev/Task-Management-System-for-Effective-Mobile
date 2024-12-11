@@ -65,8 +65,8 @@ public class Task {
     private User author;
 
     @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JoinColumn(name = "executioner_id")
-    private User executioner;
+    @JoinColumn(name = "executor_id")
+    private User executor;
 
     @CreationTimestamp
     private Instant createdAt;
@@ -82,12 +82,12 @@ public class Task {
         this.comments = new ArrayList<>();
     }
 
-    public Task(String title, String description, TaskPriority taskPriority, User executioner) {
+    public Task(String title, String description, TaskPriority taskPriority, User executor) {
         this.title = title;
         this.description = description;
         this.taskStatus = TaskStatus.WAITING;
         this.taskPriority = taskPriority;
         this.comments = new ArrayList<>();
-        this.executioner = executioner;
+        this.executor = executor;
     }
 }

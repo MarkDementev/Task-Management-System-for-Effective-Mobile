@@ -22,7 +22,7 @@ public class TaskDTO {
     @Enumerated(EnumType.STRING)
     private TaskPriority taskPriority;
 
-    private Long executionerID;
+    private Long executorID;
 
     private String initialCommentName;
 

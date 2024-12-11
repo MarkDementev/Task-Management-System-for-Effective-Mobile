@@ -13,5 +13,5 @@ import java.util.List;
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
     Page<List<Task>> findByAuthor(User user, Pageable pageable);
-    Page<List<Task>> findByExecutioner(User user, Pageable pageable);
+    Page<List<Task>> findByExecutor(User user, Pageable pageable);
 }

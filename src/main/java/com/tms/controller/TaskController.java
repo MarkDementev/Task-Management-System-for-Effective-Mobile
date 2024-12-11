@@ -71,14 +71,14 @@ public class TaskController {
      * @param limit count of returning tasks, limit - 10 tasks
      * @return filtered and paginated tasks
      */
-    @Operation(summary = "Get all tasks filtered by author id or executioner id with tasks count pagination")
+    @Operation(summary = "Get all tasks filtered by author id or executor id with tasks count pagination")
     @ApiResponses(@ApiResponse(responseCode = "200", content = @Content(
             schema = @Schema(implementation = Task.class)))
     )
     @GetMapping(path = USER_FILTER_PATH + ID_PATH, params = { "userType", "limit" })
     public ResponseEntity<Page<List<Task>>> getTasksFiltered(@PathVariable
                                                              Long id,
-                                                             @RequestParam(defaultValue = "executioner")
+                                                             @RequestParam(defaultValue = "executor")
                                                              String userType,
                                                              @RequestParam(defaultValue = "1") @Min(1) @Max(10)
                                                              int limit) {

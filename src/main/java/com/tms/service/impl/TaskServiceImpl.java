@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Service
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
-    private static final String[] userTypes = {"author", "executioner"};
+    private static final String[] userTypes = {"author", "executor"};
     private final TaskRepository taskRepository;
     private final AdminService adminService;
     private final UserService userService;
@@ -54,7 +54,7 @@ public class TaskServiceImpl implements TaskService {
         if (userType.equals(userTypes[0])) {
             filteredTasks = taskRepository.findByAuthor(userToFindBy, pageRequest);
         } else if (userType.equals(userTypes[1])) {
-            filteredTasks = taskRepository.findByExecutioner(userToFindBy, pageRequest);
+            filteredTasks = taskRepository.findByExecutor(userToFindBy, pageRequest);
         } else {
             throw new IllegalArgumentException("There is no valid userType in this request!");
         }
@@ -66,12 +66,12 @@ public class TaskServiceImpl implements TaskService {
         Admin admin = adminService.getAdmin();
         Task taskToCreate;
 
-        if (taskDTO.getExecutionerID() == null) {
+        if (taskDTO.getExecutorID() == null) {
             taskToCreate = new Task(taskDTO.getTitle(), taskDTO.getDescription(), taskDTO.getTaskPriority());
         } else {
-            User executioner = userService.getUser(taskDTO.getExecutionerID());
+            User executor = userService.getUser(taskDTO.getExecutorID());
             taskToCreate = new Task(taskDTO.getTitle(), taskDTO.getDescription(), taskDTO.getTaskPriority(),
-                    executioner);
+                    executor);
         }
         taskToCreate.setAuthor(admin);
         AtomicReference<Task> atomicNewTask = new AtomicReference<>(taskToCreate);
@@ -94,10 +94,10 @@ public class TaskServiceImpl implements TaskService {
                 taskRepository.findById(id).orElseThrow(() -> new EntityWithIDNotFoundException(
                         Task.class.getSimpleName(), id))
         );
-        User executioner = null;
+        User executor = null;
 
-        if (updateTaskDTO.getExecutionerID() != null) {
-            executioner = userService.getUser(updateTaskDTO.getExecutionerID().get());
+        if (updateTaskDTO.getExecutorID() != null) {
+            executor = userService.getUser(updateTaskDTO.getExecutorID().get());
         }
         if (updateTaskDTO.getTaskStatus() != null) {
             atomicTaskToUpdate.get().setTaskStatus(updateTaskDTO.getTaskStatus().get());
@@ -111,8 +111,8 @@ public class TaskServiceImpl implements TaskService {
         if (updateTaskDTO.getTaskPriority() != null) {
             atomicTaskToUpdate.get().setTaskPriority(updateTaskDTO.getTaskPriority().get());
         }
-        if (executioner != null) {
-            atomicTaskToUpdate.get().setExecutioner(executioner);
+        if (executor != null) {
+            atomicTaskToUpdate.get().setExecutor(executor);
         }
         if (updateTaskDTO.getAdditionalCommentName() != null && updateTaskDTO.getAdditionalCommentText() != null) {
             Admin admin = adminService.getAdmin();

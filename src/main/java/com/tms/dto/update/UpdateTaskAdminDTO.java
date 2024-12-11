@@ -18,7 +18,7 @@ public class UpdateTaskAdminDTO extends UpdateTaskDTO {
     @Enumerated(EnumType.STRING)
     private JsonNullable<TaskPriority> taskPriority;
 
-    private JsonNullable<Long> executionerID;
+    private JsonNullable<Long> executorID;
 
     private JsonNullable<String> additionalCommentName;
 

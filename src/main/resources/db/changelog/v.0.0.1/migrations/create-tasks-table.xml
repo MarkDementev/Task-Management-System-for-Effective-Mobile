@@ -25,7 +25,7 @@
             <column name="author_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
-            <column name="executioner_id" type="BIGINT">
+            <column name="executor_id" type="BIGINT">
             </column>
             <column name="created_at" type="TIMESTAMP(3) WITH TIMEZONE">
             </column>
