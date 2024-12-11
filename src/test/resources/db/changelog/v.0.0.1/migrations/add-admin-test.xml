@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="add-admin-test" author="MarkDementev">
+        <insert tableName = "all_users_and_admin">
+            <column name="email" value="admin_mail@mail.ru"/>
+            <column name="password" value="$2a$12$qMJAxKHlbIS2RYxBHAHQoOVolyl.FvBbwNlWfL2AXvx.WU6z9c4yC"/>
+            <column name="is_admin" value="true"/>
+            <column name="user_or_admin" value="admin"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

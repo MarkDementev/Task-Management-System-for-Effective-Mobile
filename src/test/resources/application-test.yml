@@ -1,0 +1,13 @@
+base-url: /tms
+
+spring:
+  application:
+    name: tms
+  datasource:
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    url: jdbc:tc:postgresql:17:///test
+  output:
+    ansi:
+      enabled: ALWAYS
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master-test.xml

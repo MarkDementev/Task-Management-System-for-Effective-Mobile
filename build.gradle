@@ -43,7 +43,10 @@ dependencies {
 			'org.openapitools:jackson-databind-nullable:0.2.6'
 	)
 	testImplementation(
-			'org.springframework.boot:spring-boot-starter-test'
+			'org.springframework.boot:spring-boot-starter-test',
+			'org.testcontainers:testcontainers:1.20.1',
+			'org.testcontainers:postgresql:1.20.1',
+			'org.testcontainers:junit-jupiter:1.20.1'
 	)
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	compileOnly 'org.projectlombok:lombok'
