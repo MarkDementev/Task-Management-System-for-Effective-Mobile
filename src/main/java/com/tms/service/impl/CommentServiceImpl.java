@@ -1,6 +1,7 @@
 package com.tms.service.impl;
 
 import com.tms.dto.CommentDTO;
+import com.tms.dto.update.UpdateCommentDTO;
 import com.tms.exception.EntityWithIDNotFoundException;
 import com.tms.model.task.Comment;
 import com.tms.model.task.Task;
@@ -35,6 +36,22 @@ public class CommentServiceImpl implements CommentService {
                 commentDTO.getText(), user, task));
 
         return commentRepository.save(atomicNewComment.get());
+    }
+
+    @Override
+    public Comment updateComment(Long id, UpdateCommentDTO updateCommentDTO) {
+        AtomicReference<Comment> atomicCommentToUpdate = new AtomicReference<>(
+                commentRepository.findById(id).orElseThrow(() -> new EntityWithIDNotFoundException(
+                        Comment.class.getSimpleName(), id))
+        );
+
+        if (updateCommentDTO.getName() != null) {
+            atomicCommentToUpdate.get().setName(updateCommentDTO.getName().get());
+        }
+        if (updateCommentDTO.getText() != null) {
+            atomicCommentToUpdate.get().setText(updateCommentDTO.getText().get());
+        }
+        return commentRepository.save(atomicCommentToUpdate.get());
     }
 
     @Override
