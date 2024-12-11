@@ -28,6 +28,9 @@ public class CommentController {
     public static final String COMMENT_CONTROLLER_PATH = "/comments";
     public static final String COMMENT_UPDATE_PATH = "/update";
     public static final String ID_PATH = "/{id}";
+    public static final String ONLY_BY_USER = """
+            @commentRepository.findById(#id).get().getAuthor().getEmail() == authentication.getName()
+            """;
     private final CommentRepository commentRepository;
     private final CommentService commentService;
 
@@ -43,7 +46,7 @@ public class CommentController {
             schema = @Schema(implementation = Comment.class))
     )
     @PutMapping(COMMENT_UPDATE_PATH + ID_PATH)
-    @PreAuthorize("@commentRepository.findById(#id).get().getAuthor().getEmail() == authentication.getName()")
+    @PreAuthorize(ONLY_BY_USER)
     public ResponseEntity<Comment> updateComment(@PathVariable Long id,
                                                  @RequestBody @Valid UpdateCommentDTO updateCommentDTO) {
         return ResponseEntity.ok().body(commentService.updateComment(id, updateCommentDTO));
@@ -52,7 +55,7 @@ public class CommentController {
     @Operation(summary = "Delete comment / Method for users-comment authors and admin")
     @ApiResponse(responseCode = "200", description = "Comment deleted")
     @DeleteMapping(ID_PATH)
-    @PreAuthorize("@commentRepository.findById(#id).get().getAuthor().getEmail() == authentication.getName()")
+    @PreAuthorize(ONLY_BY_USER)
     public void deleteComment(@PathVariable Long id) {
         commentService.deleteComment(id);
     }

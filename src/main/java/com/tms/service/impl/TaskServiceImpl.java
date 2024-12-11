@@ -17,6 +17,9 @@ import com.tms.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,14 +28,37 @@ import java.util.concurrent.atomic.AtomicReference;
 @Service
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
+    private static final String[] userTypes = {"author", "executioner"};
     private final TaskRepository taskRepository;
     private final AdminService adminService;
     private final UserService userService;
     private final CommentService commentService;
 
     @Override
+    public Task getTask(Long id) {
+        return taskRepository.findById(id).orElseThrow(() -> new EntityWithIDNotFoundException(
+                Task.class.getSimpleName(), id));
+    }
+
+    @Override
     public List<Task> getTasks() {
         return taskRepository.findAll();
+    }
+
+    @Override
+    public Page<List<Task>> getTasksFiltered(Long userId, String userType, int size) {
+        User userToFindBy = userService.getUser(userId);
+        Page<List<Task>> filteredTasks;
+        Pageable pageRequest = PageRequest.of(0, size);
+
+        if (userType.equals(userTypes[0])) {
+            filteredTasks = taskRepository.findByAuthor(userToFindBy, pageRequest);
+        } else if (userType.equals(userTypes[1])) {
+            filteredTasks = taskRepository.findByExecutioner(userToFindBy, pageRequest);
+        } else {
+            throw new IllegalArgumentException("There is no valid userType in this request!");
+        }
+        return filteredTasks;
     }
 
     @Override
