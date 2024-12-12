@@ -30,5 +30,5 @@ POST http://localhost:5001/login
 You can view possible requests here after launching the application
 
 ```sh
-http://localhost:5001/swagger.html
+http://localhost:5001/swagger-ui.html
 ```
