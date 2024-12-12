@@ -64,7 +64,7 @@ public class Task {
     @JoinColumn(name = "author_id")
     private User author;
 
-    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "executor_id")
     private User executor;
 
