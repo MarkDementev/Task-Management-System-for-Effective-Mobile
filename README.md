@@ -5,7 +5,7 @@ Task Management System by Mark Dementev (JavaMarkDem) for Effective Mobile.
 ## How to start local
 
 ```sh
-Make start
+make start
 ```
 
 After this, the application and database will be ready to process your requests on http://localhost:5001
