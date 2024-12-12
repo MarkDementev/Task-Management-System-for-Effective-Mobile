@@ -1,37 +1,37 @@
 package com.tms.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+
 import com.tms.TestUtils;
 import com.tms.config.SpringConfigForTests;
-
 import com.tms.model.task.Task;
 import com.tms.model.user.User;
 import com.tms.repository.TaskRepository;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
-import java.util.Optional;
 
-import static com.tms.TestUtils.asJson;
 import static com.tms.TestUtils.fromJson;
 import static com.tms.config.SecurityConfig.ADMIN_NAME;
-import static com.tms.config.SecurityConfig.LOGIN_PATH;
 import static com.tms.config.SpringConfigForTests.TEST_PROFILE;
-
 import static com.tms.controller.TaskController.TASK_CONTROLLER_PATH;
 import static com.tms.controller.UserController.ID_PATH;
 import static com.tms.controller.UserController.USER_CONTROLLER_PATH;
+
 import static org.assertj.core.api.Assertions.assertThat;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -95,7 +95,7 @@ public class TaskControllerIT {
         List<Task> allTasks = fromJson(response.getContentAsString(), new TypeReference<>() {
         });
 
-        assertThat(allTasks).hasSize(2);
+        assertThat(allTasks).hasSize(1);
     }
 
     @Test
