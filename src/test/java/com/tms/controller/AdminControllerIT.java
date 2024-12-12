@@ -54,7 +54,7 @@ public class AdminControllerIT {
     public void getAdminIT() throws Exception {
         Admin adminCreatedAtStart = adminRepository.findByIsAdmin(true);
         var response = testUtils.perform(
-                get("/tms" + ADMIN_CONTROLLER_PATH),
+                get(testUtils.baseUrl + ADMIN_CONTROLLER_PATH),
                         ADMIN_NAME
                 )
                 .andExpect(status().isOk())
@@ -72,7 +72,7 @@ public class AdminControllerIT {
     public void updateAdminIT() throws Exception {
         Admin adminCreatedAtStart = adminRepository.findByIsAdmin(true);
         var response = testUtils.perform(
-                put("/tms" + ADMIN_CONTROLLER_PATH)
+                put(testUtils.baseUrl + ADMIN_CONTROLLER_PATH)
                         .content(asJson(testUtils.getUpdateAdminDTO())).contentType(APPLICATION_JSON),
                         ADMIN_NAME
                 )

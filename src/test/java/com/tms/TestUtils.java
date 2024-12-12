@@ -1,5 +1,6 @@
 package com.tms;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,7 +16,10 @@ import com.tms.repository.TaskRepository;
 import com.tms.repository.UserRepository;
 import com.tms.security.JWTHelper;
 
+import org.openapitools.jackson.nullable.JsonNullableModule;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.test.web.servlet.MockMvc;
@@ -35,14 +39,19 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @Component
 public class TestUtils {
+    public static final String DEFAULT_TASK_TITLE = "title";
+    public static final String DEFAULT_TASK_DESCRIPTION = "description";
+    public static final String DEFAULT_TASK_COMMENT_NAME = "initialCommentName";
+    public static final String DEFAULT_TASK_COMMENT_TEXT = "initialCommentText";
+    public static final String DEFAULT_USER_EMAIL = "default_user@google.com";
+    public static final ObjectMapper MAPPER = new ObjectMapper().findAndRegisterModules()
+            .setSerializationInclusion(JsonInclude.Include.NON_NULL).registerModule(new JsonNullableModule());
     private static final String ADMIN_PASSWORD = "1q2w3e";
-    private static final String DEFAULT_USER_EMAIL = "default_user@google.com";
     private static final String DEFAULT_USER_PASSWORD = "aaa765";
-    private static final String DEFAULT_TASK_TITLE = "title";
-    private static final String DEFAULT_TASK_DESCRIPTION = "description";
-    private static final String DEFAULT_TASK_COMMENT_NAME = "initialCommentName";
-    private static final String DEFAULT_TASK_COMMENT_TEXT = "initialCommentText";
-    private static final ObjectMapper MAPPER = new ObjectMapper().findAndRegisterModules();
+
+    @Value("${base-url}")
+    public String baseUrl;
+
     private final LoginDto adminLoginDto = new LoginDto(
             ADMIN_NAME,
             ADMIN_PASSWORD
@@ -151,7 +160,7 @@ public class TestUtils {
     }
 
     public ResultActions createUser(UserDTO userDTO) throws Exception {
-        final var request = post("/tms" + USER_CONTROLLER_PATH)
+        final var request = post(baseUrl + USER_CONTROLLER_PATH)
                 .content(asJson(userDTO))
                 .contentType(APPLICATION_JSON);
 
@@ -159,7 +168,7 @@ public class TestUtils {
     }
 
     public ResultActions createTask(TaskDTO taskDTO) throws Exception {
-        final var request = post("/tms" + TASK_CONTROLLER_PATH)
+        final var request = post(baseUrl + TASK_CONTROLLER_PATH)
                 .content(asJson(taskDTO))
                 .contentType(APPLICATION_JSON);
 

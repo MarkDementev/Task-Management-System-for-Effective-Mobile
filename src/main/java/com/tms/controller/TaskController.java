@@ -37,9 +37,6 @@ public class TaskController {
     public static final String ID_PATH = "/{id}";
     public static final String ADMIN_UPDATE_PATH = "/by-admin-up";
     public static final String USER_UPDATE_PATH = "/by-user-up";
-    public static final String ONLY_BY_USER = """
-            @taskRepository.findById(#id).get().getAuthor().getEmail() == authentication.getName()
-            """;
     public static final String USER_FILTER_PATH = "/by-user-filtered";
     private final TaskService taskService;
     private final TaskRepository taskRepository;
@@ -49,7 +46,7 @@ public class TaskController {
             schema = @Schema(implementation = Task.class))
     )
     @GetMapping(ID_PATH)
-    @PreAuthorize(ONLY_BY_USER)
+    @PreAuthorize("@taskRepository.findById(#id).get().getAuthor().getEmail() == authentication.getName()")
     public ResponseEntity<Task> getTask(@PathVariable Long id) {
         return ResponseEntity.ok().body(taskService.getTask(id));
     }
@@ -109,7 +106,6 @@ public class TaskController {
             schema = @Schema(implementation = Task.class))
     )
     @PutMapping(USER_UPDATE_PATH + ID_PATH)
-    @PreAuthorize(ONLY_BY_USER)
     public ResponseEntity<Task> updateTaskByUser(@PathVariable Long id,
                                                  @RequestBody @Valid UpdateTaskDTO updateTaskDTO) {
         return ResponseEntity.ok().body(taskService.updateTask(id, updateTaskDTO));

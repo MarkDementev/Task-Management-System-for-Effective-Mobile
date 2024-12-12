@@ -62,7 +62,7 @@ public class UserControllerIT {
 
         User expectedUser = userRepository.findByEmail(testUtils.getDefaultUserDTO().getEmail()).get();
         var response = testUtils.perform(
-                get("/tms" + USER_CONTROLLER_PATH + ID_PATH, expectedUser.getId()),
+                get(testUtils.baseUrl + USER_CONTROLLER_PATH + ID_PATH, expectedUser.getId()),
                         testUtils.getDefaultUserDTO().getEmail()
                 )
                 .andExpect(status().isOk())
@@ -85,7 +85,7 @@ public class UserControllerIT {
         testUtils.createDefaultUser();
 
         var response = testUtils.perform(
-                get("/tms" + USER_CONTROLLER_PATH),
+                get(testUtils.baseUrl + USER_CONTROLLER_PATH),
                         ADMIN_NAME)
                 .andExpect(status().isOk())
                 .andReturn()
@@ -99,7 +99,7 @@ public class UserControllerIT {
     @Test
     public void createUserIT() throws Exception {
         var response = testUtils.perform(
-                post("/tms" + USER_CONTROLLER_PATH)
+                post(testUtils.baseUrl + USER_CONTROLLER_PATH)
                         .content(asJson(testUtils.getDefaultUserDTO()))
                         .contentType(APPLICATION_JSON),
                         ADMIN_NAME)
@@ -124,7 +124,7 @@ public class UserControllerIT {
 
         Long createdUserId = userRepository.findByEmail(testUtils.getDefaultUserDTO().getEmail()).get().getId();
         var response = testUtils.perform(
-                put("/tms" + USER_CONTROLLER_PATH + ID_PATH, createdUserId)
+                put(testUtils.baseUrl + USER_CONTROLLER_PATH + ID_PATH, createdUserId)
                         .content(asJson(testUtils.getUpdateUserDTO())).contentType(APPLICATION_JSON),
                         testUtils.getDefaultUserDTO().getEmail()
                 )
@@ -150,7 +150,7 @@ public class UserControllerIT {
         Long createdUserId = userRepository.findByEmail(testUtils.getDefaultUserDTO().getEmail()).get().getId();
 
         testUtils.perform(
-                delete("/tms" + USER_CONTROLLER_PATH + ID_PATH, createdUserId),
+                delete(testUtils.baseUrl + USER_CONTROLLER_PATH + ID_PATH, createdUserId),
                         testUtils.getDefaultUserDTO().getEmail())
                 .andExpect(status().isOk());
         assertEquals(Optional.empty(), userRepository.findByEmail(testUtils.getDefaultUserDTO().getEmail()));
